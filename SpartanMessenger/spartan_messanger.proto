@@ -1,0 +1,33 @@
+/* Protocol-buffer for the SpartanMessager service */
+
+syntax = "proto3";
+
+package grpc;
+
+service SpartanMessanger {
+	// Response-streaming RPC
+	rpc ReceiveMsg(Message) returns (stream Message) {};
+	rpc SendMsg(Message) returns (Empty);
+
+    // Connection RPC to establish who's talking to whom
+    rpc Connect(Users) returns (Status) {};
+}
+
+message Empty {}
+
+message Users {
+    string msgFrom = 1;
+    string msgTo = 2;
+    bool isBroadcast = 3;
+}
+
+message Status {
+    int64 code = 1; // Accepted values: 0 = success, 1 = Failure, 2 = Rate limit exceeded
+}
+
+message Message {
+	string fromUser = 1;
+	string toUser = 2;
+	string msg = 3;
+	bool isBroadcast = 4;
+}
